@@ -1,9 +1,25 @@
 #!/usr/bin/env python
-from tumblr_theme import Parser
+import json
+import codecs
+import argparse
 
-def main():
-    parser = Parser()
+import tumblr_theme
+
+def main(json_options_file, theme_file):
+    with open(json_options_file) as f:
+        options = json.load(f)
+    with codecs.open(theme_file, 'r', 'utf-8') as f:
+        template = f.read()
+
+    parser = tumblr_theme.Parser()
+    rendered = parser.parse_theme(options, template)
+    print rendered
 
 
 if __name__ == "__main__":
-    main()
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument("-t", "--theme", help="A Tumblr theme file.")
+    arg_parser.add_argument("-j", "--json-options", help="A JSON file with theme options.")
+
+    args = arg_parser.parse_args()
+    main(args.json_options, args.theme)
