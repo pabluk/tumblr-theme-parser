@@ -17,15 +17,6 @@ class Parser(object):
         return self.rendered
 
     def _parse_variables(self):
-        """
-        Parse only variables.
-
-        >>> options = {u'Title': u'My Title'}
-        >>> template = u"<title>{Title}</title>"
-        >>> parser = Parser()
-        >>> parser.parse_theme(options, template)
-        u'<title>My Title</title>'
-
-        """
+        """Parse only variables."""
         for key, value in self.options.items():
             self.rendered = self.rendered.replace("{%s}" % key, value)
