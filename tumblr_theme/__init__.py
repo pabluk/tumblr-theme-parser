@@ -1,3 +1,6 @@
+from pyparsing import Word, Literal, alphas
+
+
 class Parser(object):
     """A Tumblr theme parser."""
 
@@ -12,11 +15,15 @@ class Parser(object):
         self.template = template
         self.rendered = template
 
-        self._parse_variables()
+        lbracket = Literal("{")
+        rbracket = Literal("}")
+        variable = lbracket + Word(alphas) + rbracket
+        variable.setParseAction(self._replace_variable)
 
-        return self.rendered
+        return variable.transformString(template)
 
-    def _parse_variables(self):
-        """Parse only variables."""
-        for key, value in self.options.items():
-            self.rendered = self.rendered.replace("{%s}" % key, value)
+    def _replace_variable(self, s, l, t):
+        """Replace variables."""
+        var = t[1]
+        if var in self.options:
+            return self.options[var]
