@@ -15,7 +15,7 @@ class Parser(object):
         self.template = template
         self.rendered = template
 
-        variable = "{" + Optional(Word(alphas) + ":") + Word(alphas) + "}"
+        variable = "{" + Optional(Word(alphas) + ":") + Word(alphas + " ") + "}"
         variable.setResultsName('variable')
         variable.setParseAction(self._replace_variable)
 
