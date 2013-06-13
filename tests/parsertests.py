@@ -54,6 +54,22 @@ class TestParser(unittest.TestCase):
         rendered = self.parser.parse_theme(options, template)
         self.assertEqual(expected, rendered)
 
+    def test_parse_theme_with_customized_variable_and_spaces(self):
+        options = {u'color:Content Background': u'#eee'}
+        template = u"""<style type="text/css">
+                        #content {
+                            background-color: {color:Content Background};
+                        }
+                    </style>"""
+        expected = u"""<style type="text/css">
+                        #content {
+                            background-color: #eee;
+                        }
+                    </style>"""
+
+        rendered = self.parser.parse_theme(options, template)
+        self.assertEqual(expected, rendered)
+
 
 if __name__ == '__main__':
     unittest.main()
