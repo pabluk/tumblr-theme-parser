@@ -1,4 +1,4 @@
-from pyparsing import Word, Literal, alphas
+from pyparsing import Word, Optional, Literal, alphas
 
 
 class Parser(object):
@@ -15,15 +15,14 @@ class Parser(object):
         self.template = template
         self.rendered = template
 
-        lbracket = Literal("{")
-        rbracket = Literal("}")
-        variable = lbracket + Word(alphas) + rbracket
+        variable = "{" + Optional(Word(alphas) + ":") + Word(alphas) + "}"
+        variable.setResultsName('variable')
         variable.setParseAction(self._replace_variable)
 
         return variable.transformString(template)
 
     def _replace_variable(self, s, l, t):
         """Replace variables."""
-        var = t[1]
+        var = "".join(t[1:-1])
         if var in self.options:
             return self.options[var]
