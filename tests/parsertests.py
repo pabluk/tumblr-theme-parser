@@ -39,12 +39,16 @@ class TestParser(unittest.TestCase):
         self.assertEqual(expected, rendered)
 
     def test_parse_theme_with_customized_variable(self):
-        options = {u'color:Background': u'#CECECE'}
+        options = {u'color:Text': u'#CECECE'}
         template = u"""<style type="text/css">
-                            background-color: {color:Background};
+                        #content {
+                            color: {color:Text};
+                        }
                     </style>"""
         expected = u"""<style type="text/css">
-                            background-color: #CECECE;
+                        #content {
+                            color: #CECECE;
+                        }
                     </style>"""
 
         rendered = self.parser.parse_theme(options, template)
