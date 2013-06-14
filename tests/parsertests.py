@@ -150,20 +150,28 @@ class TestMetaData(unittest.TestCase):
         'example-metadata.html')
 
     def setUp(self):
-        self.parser = tumblr_theme.Parser()
         self.options = {}
         self.template = ''
         with open(self.template_file) as f:
             self.template = f.read()
+        self.parser = tumblr_theme.Parser()
+        self.parser.parse_theme(self.options, self.template)
 
     def test_metadata_extraction(self):
-        rendered = self.parser.parse_theme(self.options, self.template)
-
         self.assertIn('font:Title', self.options)
         self.assertEqual(self.options['font:Title'], 'Helvetica Neue')
 
+    def test_metadata_extraction_with_spaces(self):
         self.assertIn('color:Content Background', self.options)
         self.assertIn(self.options['color:Content Background'], '#fff')
+
+    def test_metadata_extraction_with_if(self):
+        self.assertIn('if:Show Main Nav', self.options)
+        self.assertTrue(self.options['if:Show Main Nav'])
+
+    def test_metadata_extraction_with_if_false(self):
+        self.assertIn('if:Show Tags', self.options)
+        self.assertFalse(self.options['if:Show Tags'])
 
 
 if __name__ == '__main__':

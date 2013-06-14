@@ -26,7 +26,10 @@ class Parser(object):
         meta_start, meta_end = makeHTMLTags("meta")
         for token, start, end in meta_start.scanString(self.template):
             if ":" in token.name:
-                self.options[token.name] = token.content
+                value = token.content
+                if token.name.startswith('if:'):
+                    value = bool(int(value))
+                self.options[token.name] = value
 
     def _parse_template(self, options, template):
         """Parse a template string."""
