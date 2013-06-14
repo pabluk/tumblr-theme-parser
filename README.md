@@ -88,6 +88,16 @@ You can also use `tumblr-theme-parse` like a Python module, for example
 u'<head><title>My blog</title></head>'
 ```
 
+Installation
+------------
+
+At the moment there is no Python package to install, you need install the dependencies and clone this repo
+
+```bash
+$ pip install -r requirements.txt
+$ git clone git://github.com/pabluk/tumblr-theme-parser.git
+```
+
 Running tests
 -------------
 
