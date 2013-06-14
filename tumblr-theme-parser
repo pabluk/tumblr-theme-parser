@@ -22,4 +22,7 @@ if __name__ == "__main__":
     arg_parser.add_argument("-j", "--json-options", help="A JSON file with theme options.")
 
     args = arg_parser.parse_args()
-    main(args.json_options, args.theme)
+    if args.json_options and args.theme:
+        main(args.json_options, args.theme)
+    else:
+        arg_parser.print_help()
