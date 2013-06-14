@@ -73,7 +73,7 @@ class TestParserVariables(unittest.TestCase):
 
 class TestMetaData(unittest.TestCase):
 
-    template_file = os.path.join(os.path.dirname(__file__), 'templates', 'example.html')
+    template_file = os.path.join(os.path.dirname(__file__), 'templates', 'example-metadata.html')
 
     def setUp(self):
         self.parser = tumblr_theme.Parser()
