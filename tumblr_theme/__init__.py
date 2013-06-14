@@ -1,4 +1,5 @@
-from pyparsing import Word, Optional, Literal, alphas, makeHTMLTags
+from pyparsing import alphas, Optional, Word
+from pyparsing import SkipTo, makeHTMLTags
 
 
 class Parser(object):
@@ -29,14 +30,27 @@ class Parser(object):
 
     def _parse_template(self):
         """Parse a template string."""
-        variable = "{" + Optional(Word(alphas) + ":") + Word(alphas + " ") + "}"
-        variable.setResultsName('variable')
+        variable_name = Word(alphas + " ")
+        variable_prefix = Optional(Word(alphas) + ":")
+        variable = "{" + variable_prefix + variable_name + "}"
         variable.setParseAction(self._replace_variable)
 
-        self.rendered = variable.transformString(self.template)
+        block_name = Word(alphas)
+        block_start = "{block:" + block_name + "}"
+        block_end = "{/block:" + block_name + "}"
+        block = block_start + SkipTo(block_end) + block_end
+        block.setParseAction(self._replace_block)
+
+        self.rendered = (block | variable).transformString(self.template)
 
     def _replace_variable(self, s, l, t):
         """Replace variables."""
         var = "".join(t[1:-1])
         if var in self.options:
             return self.options[var]
+
+    def _replace_block(self, s, l, t):
+        block_name = t[1]
+        block_content = t[3]
+        if block_name in self.options:
+            return (block_content * len(self.options[block_name]))

@@ -10,7 +10,7 @@ import tumblr_theme
 class TestParserVariables(unittest.TestCase):
 
     def setUp(self):
-        self.parser = tumblr_theme.Parser()        
+        self.parser = tumblr_theme.Parser()
 
     def test_parse_theme_with_simple_variable(self):
         options = {u'Title': u'My Title'}
@@ -71,9 +71,45 @@ class TestParserVariables(unittest.TestCase):
         self.assertEqual(expected, rendered)
 
 
+class TestBlocks(unittest.TestCase):
+
+    def setUp(self):
+        self.parser = tumblr_theme.Parser()
+
+    def test_block_posts(self):
+        options = {
+            u'Posts': [
+                {'Title': 'Title 1', 'Body': 'Body of the post 1.'},
+                {'Title': 'Title 2', 'Body': 'Body of the post 2.'},
+                {'Title': 'Title 3', 'Body': 'Body of the post 3.'},
+                {'Title': 'Title 4', 'Body': 'Body of the post 4.'}
+            ]
+        }
+        template = u"""
+            <ol id="posts">
+                {block:Posts}
+                    <li> ... </li>
+                {/block:Posts}
+            </ol>"""
+        expected = u"""
+            <ol id="posts">
+                <li> ... </li>
+                <li> ... </li>
+                <li> ... </li>
+                <li> ... </li>
+                
+            </ol>"""
+
+        rendered = self.parser.parse_theme(options, template)
+        self.assertEqual(expected, rendered)
+
+
 class TestMetaData(unittest.TestCase):
 
-    template_file = os.path.join(os.path.dirname(__file__), 'templates', 'example-metadata.html')
+    template_file = os.path.join(
+        os.path.dirname(__file__),
+        'templates',
+        'example-metadata.html')
 
     def setUp(self):
         self.parser = tumblr_theme.Parser()
