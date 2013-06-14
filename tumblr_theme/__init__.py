@@ -41,7 +41,7 @@ class Parser(object):
         block = block_start + SkipTo(block_end) + block_end
         block.setParseAction(self._replace_block(options))
 
-        return (block | variable).transformString(self.template)
+        return (block | variable).transformString(template)
 
     def _replace_variable(self, options):
         """Replace variables."""
