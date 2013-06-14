@@ -1,0 +1,19 @@
+<html>
+    <head>
+    </head>
+    <body>
+        {block:Posts}
+            <div class="post">
+            <article class="{PostType}">
+            {block:Text}
+            {block:Title}
+            <a href="{Permalink}">
+                <h2>{Title}</h2> 
+            </a>
+            {/block:Title}
+            {Body}
+            {/block:Text}
+            </div>
+        {/block:Posts}
+     </body>
+</html>

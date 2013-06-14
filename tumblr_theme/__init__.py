@@ -35,13 +35,26 @@ class Parser(object):
         variable = "{" + variable_prefix + variable_name + "}"
         variable.setParseAction(self._replace_variable(options))
 
-        block_name = oneOf("Posts")
+        block_name = oneOf("Title")
         block_start = "{block:" + block_name + "}"
         block_end = "{/block:" + block_name + "}"
         block = block_start + SkipTo(block_end) + block_end
         block.setParseAction(self._replace_block(options))
 
-        return (block | variable).transformString(template)
+        block_type_name = oneOf("Text Image")
+        block_type_start = "{block:" + block_type_name + "}"
+        block_type_end = "{/block:" + block_type_name + "}"
+        block_type = block_type_start + SkipTo(block_type_end) + block_type_end
+        block_type.setParseAction(self._replace_block_type(options))
+
+        block_iter_name = oneOf("Posts")
+        block_iter_start = "{block:" + block_iter_name + "}"
+        block_iter_end = "{/block:" + block_iter_name + "}"
+        block_iter = block_iter_start + SkipTo(block_iter_end) + block_iter_end
+        block_iter.setParseAction(self._replace_block_iter(options))
+
+        parser = (block | block_type | block_iter | variable)
+        return parser.transformString(template)
 
     def _replace_variable(self, options):
         """Replace variables."""
@@ -53,6 +66,28 @@ class Parser(object):
 
     def _replace_block(self, options):
         """Replace blocks."""
+        def conversionParseAction(s, l, t):
+            block_name = t[1]
+            block_content = t[3]
+            if block_name in options:
+                return self._parse_template(options, block_content)
+            else:
+                return ""
+        return conversionParseAction
+
+    def _replace_block_type(self, options):
+        """Replace by type of post."""
+        def conversionParseAction(s, l, t):
+            block_name = t[1]
+            block_content = t[3]
+            if block_name.lower() == options['PostType']:
+                return self._parse_template(options, block_content)
+            else:
+                return ""
+        return conversionParseAction
+
+    def _replace_block_iter(self, options):
+        """Replace blocks with content from an iterable."""
         def conversionParseAction(s, l, t):
             block_name = t[1]
             block_content = t[3]

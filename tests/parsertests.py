@@ -74,6 +74,8 @@ class TestParserVariables(unittest.TestCase):
 class TestBlocks(unittest.TestCase):
 
     def setUp(self):
+        self.template_dir = os.path.join(os.path.dirname(__file__),
+            'templates')
         self.parser = tumblr_theme.Parser()
 
     def test_block_posts(self):
@@ -99,6 +101,42 @@ class TestBlocks(unittest.TestCase):
                 <li> ... </li>
                 
             </ol>"""
+
+        rendered = self.parser.parse_theme(options, template)
+        self.assertEqual(expected, rendered)
+
+    def test_block_post_content(self):
+        template_file = os.path.join(self.template_dir,
+            'block-post-content.html')
+        with open(template_file) as f:
+            template = f.read()
+        expected_file = os.path.join(self.template_dir,
+            'block-post-content_expected.html')
+        with open(expected_file) as f:
+            expected = f.read()
+
+        options = {
+            u'Posts': [
+                {
+                    'Title': 'Title 1',
+                    'Body': 'Body of the post 1.',
+                    'PostType': 'text',
+                    'Permalink': '/post/1/'
+                },
+                {
+                    'Title': 'Title 2',
+                    'Body': 'Body of the post 2.',
+                    'PostType': 'text',
+                    'Permalink': '/post/2/'
+                },
+                {
+                    'Title': 'Title 3',
+                    'Body': 'Body of the post 3.',
+                    'PostType': 'text',
+                    'Permalink': '/post/3/'
+                },
+            ]
+        }
 
         rendered = self.parser.parse_theme(options, template)
         self.assertEqual(expected, rendered)
