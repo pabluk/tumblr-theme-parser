@@ -89,9 +89,9 @@ u'<head><title>My blog</title></head>'
 ```
 
 Running tests
----------
+-------------
 
-To run unittest
+To run unittests
 
 ```bash
 $ tests/parsertests.py
