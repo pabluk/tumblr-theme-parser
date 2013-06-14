@@ -35,13 +35,13 @@ class Parser(object):
         variable = "{" + variable_prefix + variable_name + "}"
         variable.setParseAction(self._replace_variable(options))
 
-        block_name = oneOf("Title")
+        block_name = oneOf("Title Description PreviousPage NextPage")
         block_start = "{block:" + block_name + "}"
         block_end = "{/block:" + block_name + "}"
         block = block_start + SkipTo(block_end) + block_end
         block.setParseAction(self._replace_block(options))
 
-        block_type_name = oneOf("Text Image")
+        block_type_name = oneOf("Text Photo Panorama Photoset Quote Link Chat Video Audio")
         block_type_start = "{block:" + block_type_name + "}"
         block_type_end = "{/block:" + block_type_name + "}"
         block_type = block_type_start + SkipTo(block_type_end) + block_type_end
