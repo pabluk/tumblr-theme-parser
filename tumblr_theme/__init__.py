@@ -59,6 +59,6 @@ class Parser(object):
             if block_name in options:
                 rendered = ""
                 for element in options[block_name]:
-                    rendered += block_content
+                    rendered += self._parse_template(element, block_content)
                 return rendered
         return conversionParseAction
