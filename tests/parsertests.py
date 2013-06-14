@@ -7,7 +7,7 @@ import unittest
 import tumblr_theme
 
 
-class TestParser(unittest.TestCase):
+class TestParserVariables(unittest.TestCase):
 
     def setUp(self):
         self.parser = tumblr_theme.Parser()        
@@ -69,6 +69,27 @@ class TestParser(unittest.TestCase):
 
         rendered = self.parser.parse_theme(options, template)
         self.assertEqual(expected, rendered)
+
+
+class TestMetaData(unittest.TestCase):
+
+    template_file = os.path.join(os.path.dirname(__file__), 'templates', 'example.html')
+
+    def setUp(self):
+        self.parser = tumblr_theme.Parser()
+        self.options = {}
+        self.template = ''
+        with open(self.template_file) as f:
+            self.template = f.read()
+
+    def test_metadata_extraction(self):
+        rendered = self.parser.parse_theme(self.options, self.template)
+
+        self.assertIn('font:Title', self.options)
+        self.assertEqual(self.options['font:Title'], 'Helvetica Neue')
+
+        self.assertIn('color:Content Background', self.options)
+        self.assertIn(self.options['color:Content Background'], '#fff')
 
 
 if __name__ == '__main__':
