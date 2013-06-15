@@ -97,6 +97,7 @@ At the moment there is no Python package to install, you need install the depend
 $ pip install -r requirements.txt
 $ git clone git://github.com/pabluk/tumblr-theme-parser.git
 ```
+It was tested with Python 2.7.4.
 
 Running tests
 -------------
