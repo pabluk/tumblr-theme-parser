@@ -6,8 +6,12 @@ import argparse
 import tumblr_theme
 
 def main(json_options_file, theme_file):
-    with open(json_options_file) as f:
-        options = json.load(f)
+    if json_options_file:
+        with open(json_options_file) as f:
+            options = json.load(f)
+    else:
+        options = {}
+
     with codecs.open(theme_file, 'r', 'utf-8') as f:
         template = f.read()
 
@@ -22,7 +26,7 @@ if __name__ == "__main__":
     arg_parser.add_argument("-j", "--json-options", help="A JSON file with theme options.")
 
     args = arg_parser.parse_args()
-    if args.json_options and args.theme:
+    if args.theme:
         main(args.json_options, args.theme)
     else:
         arg_parser.print_help()
