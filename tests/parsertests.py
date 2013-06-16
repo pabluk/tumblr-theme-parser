@@ -141,6 +141,20 @@ class TestBlocks(unittest.TestCase):
         rendered = self.parser.parse_theme(options, template)
         self.assertEqual(expected, rendered)
 
+    def test_block_conditional(self):
+        template_file = os.path.join(self.template_dir,
+            'meta-if-tags.html')
+        with open(template_file) as f:
+            template = f.read()
+        expected_file = os.path.join(self.template_dir,
+            'meta-if-tags_expected.html')
+        with open(expected_file) as f:
+            expected = f.read()
+
+        options = {}
+        rendered = self.parser.parse_theme(options, template)
+        self.assertEqual(expected, rendered)
+
 
 class TestMetaData(unittest.TestCase):
 

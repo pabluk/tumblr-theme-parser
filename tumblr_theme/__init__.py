@@ -50,13 +50,19 @@ class Parser(object):
         block_type = block_type_start + SkipTo(block_type_end) + block_type_end
         block_type.setParseAction(self._replace_block_type(options))
 
+        block_cond_name = Word(alphas)
+        block_cond_start = "{block:If" + Optional("Not") + block_cond_name + "}"
+        block_cond_end = "{/block:If" + Optional("Not") + block_cond_name + "}"
+        block_cond = block_cond_start + SkipTo(block_cond_end) + block_cond_end
+        block_cond.setParseAction(self._replace_block_cond(options))
+
         block_iter_name = oneOf("Posts")
         block_iter_start = "{block:" + block_iter_name + "}"
         block_iter_end = "{/block:" + block_iter_name + "}"
         block_iter = block_iter_start + SkipTo(block_iter_end) + block_iter_end
         block_iter.setParseAction(self._replace_block_iter(options))
 
-        parser = (block | block_type | block_iter | variable)
+        parser = (block | block_type | block_cond | block_iter | variable)
         return parser.transformString(template)
 
     def _replace_variable(self, options):
@@ -87,6 +93,29 @@ class Parser(object):
                 return self._parse_template(options, block_content)
             else:
                 return ""
+        return conversionParseAction
+
+    def _replace_block_cond(self, options):
+        """Replace a conditional block."""
+        def conversionParseAction(s, l, t):
+            num_tokens = len(t)
+            if num_tokens == 9:
+                block_name = t[2].lower()
+                block_content = t[4]
+                block_bool = False
+            if num_tokens == 7:
+                block_name = t[1].lower()
+                block_content = t[3]
+                block_bool = True
+
+            for key, value in options.items():
+                if key.startswith('if:'):
+                    name = key.replace('if:', '').replace(' ', '').lower()
+                    if block_name == name:
+                        if block_bool == value:
+                            return self._parse_template(options, block_content)
+                        else:
+                            return ""
         return conversionParseAction
 
     def _replace_block_iter(self, options):
