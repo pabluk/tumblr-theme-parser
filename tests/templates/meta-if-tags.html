@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <meta name="if:Show people I follow" content="1"/>
+        <meta name="if:Reverse pagination" content="0"/>
+    </head>
+    <body>
+        {block:IfNotReversePagination}
+            <a href="...">Previous</a> <a href="...">Next</a>
+        {/block:IfNotReversePagination}
+
+        {block:IfReversePagination}
+            <a href="...">Next</a> <a href="...">Previous</a>
+        {/block:IfReversePagination}
+
+        {block:IfShowPeopleIFollow}
+            <div id="following">...</div>
+        {/block:IfShowPeopleIFollow}
+    </body>
+</html>
