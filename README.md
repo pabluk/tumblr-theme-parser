@@ -91,11 +91,11 @@ u'<head><title>My blog</title></head>'
 Installation
 ------------
 
-At the moment there is no Python package to install, you need install the dependencies and clone this repo
+At the moment there is no Python package to install, you need to clone this repo and install the dependencies
 
 ```bash
-$ pip install -r requirements.txt
 $ git clone git://github.com/pabluk/tumblr-theme-parser.git
+$ pip install -r requirements.txt
 ```
 It was tested with Python 2.7.4.
 
@@ -105,5 +105,5 @@ Running tests
 To run unittests
 
 ```bash
-$ tests/parsertests.py
+$ ./tests/parsertests.py
 ```
